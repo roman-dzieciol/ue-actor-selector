@@ -1,0 +1,29 @@
+[Setup]
+LocalProduct=ActorSelector
+ReadMe=Help\ActorSelector.txt
+SetupWindowTitle=ActorSelector
+AutoplayWindowTitle=ActorSelector
+ProductURL=http://wiki.beyondunreal.com/wiki/Switch
+VersionURL=http://wiki.beyondunreal.com/wiki/Switch
+Developer=Roman Switch` Dzieciol
+DeveloperURL=http://wiki.beyondunreal.com/wiki/Switch
+Logo=Help\InstallerLogo2004.bmp
+
+[UT2004Requirement]
+LocalProduct=UT2004
+ProductURL=http://www.unrealtournament.com/
+VersionURL=http://unreal.epicgames.com/
+Developer=Epic Games, Inc.
+DeveloperURL=http://www.epicgames.com/
+
+[GMain]
+Caption=ActorSelector
+Description=Plugin and help file.
+
+[GSource]
+Caption=Source code
+Description=Plugin source code.
+
+[GInstaller]
+Caption=Installer
+Description=Installer files

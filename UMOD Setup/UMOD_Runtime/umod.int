@@ -1,0 +1,25 @@
+[Setup]
+LocalProduct=ActorSelector
+ReadMe=Help\ActorSelector.txt
+SetupWindowTitle=ActorSelector
+AutoplayWindowTitle=ActorSelector
+ProductURL=http://wiki.beyondunreal.com/wiki/Switch
+VersionURL=http://wiki.beyondunreal.com/wiki/Switch
+Developer=Roman Switch` Dzieciol
+DeveloperURL=http://wiki.beyondunreal.com/wiki/Switch
+Logo=Help\InstallerLogo.bmp
+
+[UE2RuntimeRequirement]
+LocalProduct=UT2004
+
+[GMain]
+Caption=ActorSelector
+Description=Plugin and help file.
+
+[GSource]
+Caption=Source code
+Description=Plugin source code.
+
+[GInstaller]
+Caption=Installer
+Description=Installer files

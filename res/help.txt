@@ -1,0 +1,193 @@
+===============================================================================
+  ActorSelector BETA1
+  UnrealEd plugin, adds advanced features for selecting actors.
+
+  Copyright 2005 Roman Switch` Dzieciol, neai o2.pl
+  http://wiki.beyondunreal.com/wiki/Switch
+===============================================================================
+
+UnrealEd allows you to perform basic operations on actor selection such as:
+- Select All Actors
+- Select All Actors of class X
+- Select All Actors Matching StaticMesh
+- Select All Actors Matching Zone
+- Invert Selection
+- Clear Selection
+
+This clearly isn't enough, what if someone wanted to select all corona lights
+that use a texture from package MyTextures?
+
+
+ActorSelector adds 3 new types of selection features:
+
+1) Selecting actors matching any variable or part of it. For example you can
+   select all Actors which have bCorona=true, or with DrawType that has "Mesh"
+   in it's name (DT_Mesh and DT_StaticMesh), or all actors with tag "something"
+   in ExcludeTag list. This is helpful ie when you're putting previously placed
+   actors into groups or replacing some resources with new ones.
+   
+2) Storing selection in memory. You can save current selection and restore it
+   back at later time.
+
+3) Boolean operations. ActorSelector uses the "select matching any variable"
+   feature to find out whether the actor should be selected but it can also 
+   take previous selection into account.
+   For example:
+   - Two actors are selected:
+     * an actor with bCorona=false
+     * and a light with bCorona=true
+   - The plugin is told to select actors with bCorona=true, using operator "OR"
+     * "OR" will select actor if it was selected previously or if it will be 
+       selected by the "selecting matching any variable" feature.
+   - Plugin selects all actors with bCorona=true *and* that one actor with
+     bCorona=false, because it was selected previously.
+
+
+
+===============================================================================
+  Install
+===============================================================================
+
+Requirements:
+-------------------------------------------------------------------------------
+- UT2004 or UE2 Runtime
+
+
+UT2004 installer:
+-------------------------------------------------------------------------------
+- Run the ActorSelector.ut4mod file.
+- If ActorSelector.ut4mod doesn't work:
+  * Extract RepairUT4MOD.inf file to your main Game folder (ie: \UT2004\).
+  * Right-click \UT2004\RepairUT4MOD.inf and select "Install".
+  * Try running ActorSelector.ut4mod again.
+
+
+UE2 Runtime installer:
+-------------------------------------------------------------------------------
+- Run the ActorSelector.urm file.
+- If ActorSelector.urm doesn't work:
+  * Extract RepairURM.inf file to your main Runtime folder (ie: \Runtime\).
+  * Right-click \Runtime\RepairURM.inf and select "Install".
+  * Try running ActorSelector.urm again.
+
+
+Running UnrealEd with custom ini file
+-------------------------------------------------------------------------------
+- If you do use some custom ini's, you'll have to update them manually.
+- Add ActorSelector to EditPackages in [Editor.EditorEngine] section.
+- http://wiki.beyondunreal.com/wiki/Add_EditPackage
+
+
+===============================================================================
+  Help
+===============================================================================
+
+How to run the plugin:
+-------------------------------------------------------------------------------
+- To run the plugin click on ActorSelector icon.
+- The icon is located in the vertical toolbar, just below brush builders.
+- The icon looks like binoculars in front of red rectangle outline.
+
+
+Options:
+-------------------------------------------------------------------------------
+- Options can be accessed by right-clicking the icon.
+- If plugin options are open, clicking on icon may start plugin with old
+  options. In this case click on the "Build" options button instead.
+
+
+Options parameters:
+-------------------------------------------------------------------------------
+- [Mode] What should plugin do when activated
+  * [Select]       Find and Select actors with property [PName] set to [PValue]
+  * [Invert]       Invert current selection
+  * [Memorize]     Store current selection in memory
+  * [Recall]       Recall selection from memory
+  * [SelectAnd]    Find then Select using "AND" and previous selection
+  * [SelectOr]     Find then Select using "OR" and previous selection
+  * [SelectXor]    Find then Select using "XOR" and previous selection
+  * [SelectMem*]   Those modes work just like "Recall" followed by "Select*".
+                   They are provided for convenience reasons only.
+- [PName] Full name of property
+- [PValue] Full or partial value of property
+- [PType] How to interpret the text in [PValue]
+  * [Text] Select if values are equal
+  * [PartialText] Select if Actor's value contains [PValue]
+  * [Number] Select if values are equal. Strip spaces in [PValue]
+  * [Bits] Advanced. Treat [PName] as bit flag property. Select if value
+    has bits [PValue] set.
+- [bOnlySelectable] Ignore hidden/temp actors that shouldn't and cannot be
+  normally selected. Don't disable unless you know what you're doing.
+- [bUpdateWindows] Update the F4 window and viewports after running the plugin.
+  May be slow if there are zillions of actors in level.
+
+
+Example: Select all corona actors that use a texture from package MyTextures
+-------------------------------------------------------------------------------
+- In plugin options set:
+  * Mode = Select
+  * PName = bCorona
+  * PValue = True
+  * PType = Text
+- Run the plugin, it will select all lights with bCorona=true
+- [optional]
+  * For experimenting convenience, lets memorize selection:
+  * In Options select Mode = Memorize
+  * Run the plugin
+- [optional]
+  * Lets check what was memorized:
+  * Unselect actors by clicking on something else
+  * In Options select Mode = Recall
+  * Run the plugin
+  * Open the F4 window, "Lighting" tab, bCorona should be True.
+- We will use boolean operator "AND" to select coronas with specific texture
+  * At this point, all and only actors with bCorona=true should be selected
+  * In Options:
+    * Mode = SelectAnd
+    * PName = Skins
+    * PValue = MyTextures.
+    * PType = PartialText
+  * Notice the dot after "MyTextures". The full texture property looks like
+    "PackageFile.Group.ObjectName". If we used only "MyTextures" it could mean
+    package, group or object name.
+  * Run the plugin and all the objects selected should have bCorona=true and
+    a Skin from package MyTextures. You can verify that either in F4 window or
+    by copying selection to clipboard and pasting into any text editor.
+
+
+Boolean operations:
+-------------------------------------------------------------------------------
+Name    Previously Selected     Selected by Search      Actor will be Selected
+
+AND     Yes                     Yes                     Yes
+AND     Yes                     No                      No
+AND     No                      Yes                     No
+AND     No                      No                      No
+
+OR      Yes                     Yes                     Yes
+OR      Yes                     No                      Yes
+OR      No                      Yes                     Yes
+OR      No                      No                      No
+
+XOR     Yes                     Yes                     No
+XOR     Yes                     No                      Yes
+XOR     No                      Yes                     Yes
+XOR     No                      No                      No
+
+
+===============================================================================
+  Uninstall
+===============================================================================
+
+UT2004 uninstaller:
+-------------------------------------------------------------------------------
+- Run UT2004\System\Setup.exe
+- Select ActorSelector and click next.
+
+UE2 Runtime uninstaller:
+-------------------------------------------------------------------------------
+- Run Runtime\System\Setup.exe
+- Select ActorSelector and click next.
+
+
+===============================================================================
